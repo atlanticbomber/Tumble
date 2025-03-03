@@ -1,0 +1,12 @@
+name: tumble
+version: '0.0.1.0-SNAPSHOT'
+main: net.lahan.tumble.Tumble
+api-version: '1.21'
+authors: [ atlanticbomber ]
+description: Tumble minigame from the xbox360 edition
+commands:
+  snowDestroysBlocks:
+    description: Allows snowballs to break blocks they hit
+    aliases: [snowBreaks, snowTime]
+    usage: "Usage /snowDestroysBlocks [true|false]"
+
