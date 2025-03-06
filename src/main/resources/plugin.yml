@@ -8,5 +8,5 @@ commands:
   snowDestroysBlocks:
     description: Allows snowballs to break blocks they hit
     aliases: [snowBreaks, snowTime]
-    usage: "Usage /snowDestroysBlocks [true|false]"
+    usage: "Usage: /snowDestroysBlocks [true|false]"
 
