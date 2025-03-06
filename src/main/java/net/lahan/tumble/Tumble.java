@@ -14,7 +14,17 @@ public final class Tumble extends JavaPlugin {
     public File getData() {
         return data;
     }
-
+    public void initConfig() {
+        FileConfiguration config = getConfig();
+        config.set("snowDestroysBlocks",true);
+        config.set("rocketDestroysBlocks",true);
+        config.set("gameArea.size", 50);
+        config.set("gameArea.start.x",0);
+        config.set("gameArea.start.y",0);
+        config.set("gameArea.end.x",0);
+        config.set("gameArea.end.y",0);
+        saveConfig();
+    }
 
     @Override
     public void onEnable() {
@@ -23,9 +33,8 @@ public final class Tumble extends JavaPlugin {
         data = new File(getDataFolder(),"config.yml");
         if(!data.exists()) {
             saveDefaultConfig();
+            initConfig();
         }
-
-
         SnowDestroysBlocks snowCMD = new SnowDestroysBlocks(this);
         this.getCommand("snowDestroysBlocks").setExecutor(snowCMD);
         getServer().getPluginManager().registerEvents(new SnowBreaker(this), this);

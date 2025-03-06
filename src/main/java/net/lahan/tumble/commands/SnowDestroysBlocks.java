@@ -35,11 +35,7 @@ public class SnowDestroysBlocks implements TabExecutor {
         FileConfiguration config = YamlConfiguration.loadConfiguration(plug.getData());
         config.set("snowDestroysBlocks",Boolean.parseBoolean(args[0]));
         plug.getLogger().info("argument: "+args[0]+", parsed argument: "+Boolean.parseBoolean(args[0]));
-        try {
-            config.save(plug.getData());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        plug.saveConfig();
         return true;
     }
 }
