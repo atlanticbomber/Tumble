@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SnowDestroysBlocks implements TabExecutor {
@@ -32,7 +33,13 @@ public class SnowDestroysBlocks implements TabExecutor {
         if(args.length!=1 || !(args[0].equalsIgnoreCase("false")||args[0].equalsIgnoreCase("true")))
             return false;
         FileConfiguration config = YamlConfiguration.loadConfiguration(plug.getData());
-        config.set("SnowDestroysBlocks",Boolean.parseBoolean(args[0]));
+        config.set("snowDestroysBlocks",Boolean.parseBoolean(args[0]));
+        plug.getLogger().info("argument: "+args[0]+", parsed argument: "+Boolean.parseBoolean(args[0]));
+        try {
+            config.save(plug.getData());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return true;
     }
 }

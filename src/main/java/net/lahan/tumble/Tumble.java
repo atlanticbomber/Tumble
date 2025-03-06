@@ -15,8 +15,6 @@ public final class Tumble extends JavaPlugin {
         return data;
     }
 
-    private FileConfiguration config;
-
 
     @Override
     public void onEnable() {
@@ -25,17 +23,8 @@ public final class Tumble extends JavaPlugin {
         data = new File(getDataFolder(),"config.yml");
         if(!data.exists()) {
             saveDefaultConfig();
-            config = YamlConfiguration.loadConfiguration(data);
-            config.set("SnowDestroysBlocks", true);
-            config.set("gameArea.start.x",0);
-            config.set("gameArea.start.y",0);
-            config.set("gameArea.end.x",0);
-            config.set("gameArea.end.y",0);
-            saveConfig();
         }
-        else {
-            config = YamlConfiguration.loadConfiguration(data);
-        }
+
 
         SnowDestroysBlocks snowCMD = new SnowDestroysBlocks(this);
         this.getCommand("snowDestroysBlocks").setExecutor(snowCMD);
