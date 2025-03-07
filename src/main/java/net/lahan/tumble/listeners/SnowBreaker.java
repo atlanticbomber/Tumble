@@ -25,13 +25,21 @@ public class SnowBreaker implements Listener {
     }
     @EventHandler
     public void onSnowHit(ProjectileHitEvent event) {
-        FileConfiguration configuration = YamlConfiguration.loadConfiguration(plug.getData());
-        if(configuration.getBoolean("snowDestroysBlocks")&&event.getEntity().getType()==EntityType.SNOWBALL) {
+        if(snowballConditions(Objects.requireNonNull(event.getHitBlock()))&&event.getEntity().getType()==EntityType.SNOWBALL) {
             Block block = Objects.requireNonNull(event.getHitBlock());
             plug.getServer().getWorld("world").
                     playEffect(block.getLocation(), Effect.STEP_SOUND, block.getType());
             block.setType(Material.AIR);
         }
+    }
+    public boolean snowballConditions(Block b) {
+        FileConfiguration configuration = plug.getConfig();
+        int lowX = configuration.getInt("gameArea.start.x");
+        int lowZ = configuration.getInt("gameArea.start.z");
+        int highX = configuration.getInt("gameArea.end.x");
+        int highZ = configuration.getInt("gameArea.end.z");
+        boolean inArena = b.getX()>=lowX&&b.getX()<highX&&b.getZ()>=lowZ&&b.getZ()<highZ;
+        return configuration.getBoolean("snowDestroysBlocks")||inArena;
     }
 
 }

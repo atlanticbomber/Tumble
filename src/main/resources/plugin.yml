@@ -9,4 +9,6 @@ commands:
     description: Allows snowballs to break blocks they hit
     aliases: [snowBreaks, snowTime]
     usage: "Usage: /snowDestroysBlocks [true|false]"
-
+  arena:
+    description: Allows users to set the area in which tumble mechanics function, set the default arena size for games, and disable the arena (set, size, and disable respectively)
+    usage: "Usage: /arena set [int| ] [int| ] [int| ] [int| ], size [int|default], disable"

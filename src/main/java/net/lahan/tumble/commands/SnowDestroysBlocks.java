@@ -5,11 +5,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
 import java.util.List;
 
 public class SnowDestroysBlocks implements TabExecutor {
@@ -32,9 +29,8 @@ public class SnowDestroysBlocks implements TabExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length!=1 || !(args[0].equalsIgnoreCase("false")||args[0].equalsIgnoreCase("true")))
             return false;
-        FileConfiguration config = YamlConfiguration.loadConfiguration(plug.getData());
+        FileConfiguration config = plug.getConfig();
         config.set("snowDestroysBlocks",Boolean.parseBoolean(args[0]));
-        plug.getLogger().info("argument: "+args[0]+", parsed argument: "+Boolean.parseBoolean(args[0]));
         plug.saveConfig();
         return true;
     }
