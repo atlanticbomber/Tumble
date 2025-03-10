@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class Arena implements TabExecutor {
-    private Tumble plug;
-    public static final int DEFAULT_SIZE = 50;
+    private final Tumble plug;
+    public static final int DEFAULT_SIZE = 51;
     public Arena(Tumble plug) {
         this.plug = plug;
     }
@@ -53,30 +53,18 @@ public class Arena implements TabExecutor {
                 plug.saveConfig();
                 return true;
             }
-            else if(args.length==5) {
-                int endX;
-                int endZ;
-                try {
-                    startX = Integer.parseInt(args[1]);
-                    startZ = Integer.parseInt(args[2]);
-                    endX = Integer.parseInt(args[3]);
-                    endZ = Integer.parseInt(args[4]);
-                } catch (NumberFormatException e) {
-                    return false;
-                }
-                config.set("gameArea.start.x",Math.min(startX,endX));
-                config.set("gameArea.start.z",Math.min(startZ,endZ));
-                config.set("gameArea.end.x",Math.max(startX,endX));
-                config.set("gameArea.end.z",Math.max(startZ,endZ));
+        }
+        else if(args[0].equals("size")&&args.length==2) {
+            if(args[1].equals("default")) {
+                config.set("gameArea.size",DEFAULT_SIZE);
                 plug.saveConfig();
                 return true;
             }
-        }
-        else if(args[0].equals("size")&&args.length==2) {
             int newSize;
             try {newSize = Integer.parseInt(args[1]);}
             catch(NumberFormatException e) {return false;}
-            config.set("gameArea.size",newSize);
+            config.set("gameArea.size",2*(newSize/2)+1);
+            plug.saveConfig();
             return true;
         }
         else if(args[0].equals("disable")&&args.length==1) {

@@ -1,5 +1,5 @@
 name: tumble
-version: '0.0.1.0-SNAPSHOT'
+version: '0.0.2.0-SNAPSHOT'
 main: net.lahan.tumble.Tumble
 api-version: '1.21'
 authors: [ atlanticbomber ]
@@ -11,4 +11,7 @@ commands:
     usage: "Usage: /snowDestroysBlocks [true|false]"
   arena:
     description: Allows users to set the area in which tumble mechanics function, set the default arena size for games, and disable the arena (set, size, and disable respectively)
-    usage: "Usage: /arena set [int| ] [int| ] [int| ] [int| ], size [int|default], disable"
+    usage: "Usage: /arena set [startX] [startZ], size [newSize:int | default], disable"
+  buildLayer:
+    description: Allows users to create layers within the game area
+    usage: "Usage: /buildLayer [numLayers:int] [specialLayerFeatures: true|false]"

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SnowDestroysBlocks implements TabExecutor {
 
-    private Tumble plug;
+    private final Tumble plug;
 
     public SnowDestroysBlocks(Tumble plug) {
 
@@ -21,7 +21,7 @@ public class SnowDestroysBlocks implements TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return List.of("true","false");
+        return strings.length==1?List.of("true","false"):List.of();
     }
 
 
