@@ -1,1 +1,16 @@
-
+snowDestroysBlocks: true
+rocketDestroysBlocks: true
+gameArea:
+  size: 51
+  start:
+    x: 0
+    z: 0
+  end:
+    x: 0
+    z: 0
+layers:
+  spacing: 15
+  blockFrequency: 0.05
+  circleAdjustment: 0.3
+  number: 3
+  includeSpecialLayers: true

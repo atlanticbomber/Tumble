@@ -1,17 +1,17 @@
 name: tumble
-version: '0.0.2.0-SNAPSHOT'
+version: '0.3.2-SNAPSHOT'
 main: net.lahan.tumble.Tumble
 api-version: '1.21'
 authors: [ atlanticbomber ]
 description: Tumble minigame from the xbox360 edition
 commands:
-  snowDestroysBlocks:
+  tumble-snowDestroysBlocks:
     description: Allows snowballs to break blocks they hit
     aliases: [snowBreaks, snowTime]
-    usage: "Usage: /snowDestroysBlocks [true|false]"
-  arena:
+    usage: "Usage: /tumble:snowDestroysBlocks [true|false]"
+  tumble-arena:
     description: Allows users to set the area in which tumble mechanics function, set the default arena size for games, and disable the arena (set, size, and disable respectively)
-    usage: "Usage: /arena set [startX] [startZ], size [newSize:int | default], disable"
-  buildLayer:
+    usage: "Usage: /tumble:arena set [startX] [startZ], size [newSize:int | default], disable"
+  tumble-buildLayer:
     description: Allows users to create layers within the game area
-    usage: "Usage: /buildLayer [numLayers:int] [specialLayerFeatures: true|false]"
+    usage: "Usage: /tumble:buildLayer [numLayers:int] [specialLayerFeatures: true|false]"

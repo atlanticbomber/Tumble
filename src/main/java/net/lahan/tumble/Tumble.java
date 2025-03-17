@@ -23,6 +23,8 @@ public final class Tumble extends JavaPlugin {
         config.set("layers.spacing",15);
         config.set("layers.blockFrequency",0.05);
         config.set("layers.circleAdjustment",0.3);
+        config.set("layers.number",3);
+        config.set("layers.includeSpecialLayers",true);
         saveConfig();
     }
 
@@ -35,10 +37,11 @@ public final class Tumble extends JavaPlugin {
             saveDefaultConfig();
             initConfig();
         }
-        this.getCommand("snowDestroysBlocks").setExecutor(new SnowDestroysBlocks(this));
+        this.getCommand("tumble-arena").setExecutor(new Arena(this));
+        this.getCommand("tumble-buildLayer").setExecutor(new BuildLayer(this));
+        this.getCommand("tumble-snowDestroysBlocks").setExecutor(new SnowDestroysBlocks(this));
         getServer().getPluginManager().registerEvents(new SnowBreaker(this), this);
-        this.getCommand("arena").setExecutor(new Arena(this));
-        this.getCommand("buildLayer").setExecutor(new BuildLayer(this));
+
     }
 
     @Override
