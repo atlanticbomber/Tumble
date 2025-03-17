@@ -110,8 +110,8 @@ public class BuildLayer implements TabExecutor {
                 case "second layer":
                     double powIn = 1.8+1.2*Math.pow(Math.random(),2);
                     double powOut = 1.5+2*Math.pow(Math.random(),2);
-                    double radIn = (Math.random()<0.3)?(0):(((arenaSize/2.0-edgeRemover)/2.0)*Math.random());
-                    double radOut = (Math.random()<0.3)?(0):(radIn+(arenaSize/2.0-edgeRemover-radIn)*Math.random());
+                    double radIn = (Math.random()<0.3)?(0):(3+((arenaSize/2.0-edgeRemover)/2.0-3)*Math.random());
+                    double radOut = (Math.random()<0.3)?(0):(3+radIn+(arenaSize/2.0-edgeRemover-radIn-3)*Math.random());
                     for(int x = 0; x<arenaSize; x++) {
                         for(int z = 0; z<arenaSize; z++) {
                             if(!inSquircle(x+0.5,z+0.5,arenaSize/2.0,arenaSize/2.0,radIn,powIn)&&
