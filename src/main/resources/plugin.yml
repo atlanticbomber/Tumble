@@ -1,5 +1,5 @@
 name: tumble
-version: '0.3.2-SNAPSHOT'
+version: '0.4.0-SNAPSHOT'
 main: net.lahan.tumble.Tumble
 api-version: '1.21'
 authors: [ atlanticbomber ]
@@ -8,10 +8,13 @@ commands:
   tumble-snowDestroysBlocks:
     description: Allows snowballs to break blocks they hit
     aliases: [snowBreaks, snowTime]
-    usage: "Usage: /tumble:snowDestroysBlocks [true|false]"
+    usage: "Usage: /tumble-snowDestroysBlocks [true|false]"
   tumble-arena:
     description: Allows users to set the area in which tumble mechanics function, set the default arena size for games, and disable the arena (set, size, and disable respectively)
-    usage: "Usage: /tumble:arena set [startX] [startZ], size [newSize:int | default], disable"
+    usage: "Usage: /tumble-arena set [startX] [startZ], size [newSize:int | default], disable"
   tumble-buildLayer:
     description: Allows users to create layers within the game area
-    usage: "Usage: /tumble:buildLayer [numLayers:int] [specialLayerFeatures: true|false]"
+    usage: "Usage: /tumble-buildLayer [numLayers:int] [specialLayerFeatures: true|false]"
+  tumble-layerConfigs:
+    description: Allows users to modify layer generation settings
+    usage: "Usage: /tumble-layerConfigs [spacing|blockFrequency|circleAdjustment|number|includeSpecialLayers] [int|double|double|int|boolean]"

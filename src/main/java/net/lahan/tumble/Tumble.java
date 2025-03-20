@@ -2,6 +2,7 @@ package net.lahan.tumble;
 
 import net.lahan.tumble.commands.Arena;
 import net.lahan.tumble.commands.BuildLayer;
+import net.lahan.tumble.commands.LayerConfigs;
 import net.lahan.tumble.commands.SnowDestroysBlocks;
 import net.lahan.tumble.listeners.SnowBreaker;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -40,6 +41,7 @@ public final class Tumble extends JavaPlugin {
         this.getCommand("tumble-arena").setExecutor(new Arena(this));
         this.getCommand("tumble-buildLayer").setExecutor(new BuildLayer(this));
         this.getCommand("tumble-snowDestroysBlocks").setExecutor(new SnowDestroysBlocks(this));
+        this.getCommand("tumble-layerConfigs").setExecutor(new LayerConfigs(this));
         getServer().getPluginManager().registerEvents(new SnowBreaker(this), this);
 
     }
