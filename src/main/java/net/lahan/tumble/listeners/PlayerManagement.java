@@ -37,28 +37,20 @@ public class PlayerManagement implements Listener {
         playerData.set(plug.IN_GAME, PersistentDataType.BOOLEAN,false);
         playerData.set(plug.SCORE,PersistentDataType.INTEGER,0);
         playerData.set(plug.ALIVE,PersistentDataType.BOOLEAN,false);
-        if(playerInGame(p)) {
-            int[] arena = worldData.get(plug.ARENA_COORDINATES, PersistentDataType.INTEGER_ARRAY);
-            p.teleport(new Location(w, arena[2]+7, w.getHighestBlockYAt(arena[2]+7,arena[3]+7)+1, arena[3]+7));
-        }
     }
     @EventHandler
-    public void playerLeaveConfig(PlayerQuitEvent event) {
-        PersistentDataContainer playerData = event.getPlayer().getPersistentDataContainer();
-        PersistentDataContainer worldData = event.getPlayer().getWorld().getPersistentDataContainer();
-        boolean inGame = playerData.get(plug.IN_GAME,PersistentDataType.BOOLEAN);
-        boolean alive = playerData.get(plug.ALIVE,PersistentDataType.BOOLEAN);
-        if(inGame) worldData.set(plug.NUMBER_PLAYERS,PersistentDataType.INTEGER,
-                worldData.get(plug.NUMBER_PLAYERS,PersistentDataType.INTEGER)-1);
-        if(alive) worldData.set(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER,
-                worldData.get(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER)-1);
-        playerData.set(plug.IN_GAME, PersistentDataType.BOOLEAN,false);
-        playerData.set(plug.SCORE,PersistentDataType.INTEGER,0);
-        playerData.set(plug.ALIVE,PersistentDataType.BOOLEAN,false);
-        if(worldData.get(plug.NUMBER_PLAYERS,PersistentDataType.INTEGER)==1)
-            plug.getServer().getPluginManager().callEvent(new TumbleGameEndEvent(event.getPlayer().getWorld()));
-        if(worldData.get(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER)==1)
-            plug.getServer().getPluginManager().callEvent(new TumbleRoundEndEvent(event.getPlayer().getWorld()));
+    public void teleportOutOfArena(PlayerChangedWorldEvent e) {
+        World w = e.getPlayer().getWorld();
+        PersistentDataContainer worldData = w.getPersistentDataContainer();
+        if(worldData.get(plug.HAS_GAME,PersistentDataType.BOOLEAN)) {
+            int[] arena = worldData.get(plug.ARENA_COORDINATES, PersistentDataType.INTEGER_ARRAY);
+            e.getPlayer().teleport(new Location(w, arena[2]+7, w.getHighestBlockYAt(arena[2]+7,arena[3]+7)+1, arena[3]+7));
+        }
+    }
+
+    @EventHandler
+    public void freezeInput(PlayerInputEvent e) {
+
     }
     public boolean playerInGame(Player p) {
         int[] arena = p.getWorld().getPersistentDataContainer().get(plug.ARENA_COORDINATES,PersistentDataType.INTEGER_ARRAY);

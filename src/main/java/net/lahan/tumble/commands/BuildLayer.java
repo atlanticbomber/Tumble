@@ -13,6 +13,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 import java.util.List;
 /* handles the tumble-buildLayer command and the algorithm that generates the layers in tumble games
    Layers are generated in the world where the command is run
@@ -172,11 +174,15 @@ public class BuildLayer implements TabExecutor {
     }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(sender instanceof Entity || sender instanceof BlockCommandSender) {
-            //ge sender's world data
+        if(sender instanceof Entity || sender instanceof BlockCommandSender || plug.getServer().getWorld(args[0])!=null) {
+            //get sender's world data
             World w = null;
             if(sender instanceof Entity e) w = e.getWorld();
             else if(sender instanceof BlockCommandSender b) w = b.getBlock().getWorld();
+            else if(plug.getServer().getWorld(args[0])!=null) {
+                w = plug.getServer().getWorld(args[0]);
+                args = Arrays.copyOfRange(args,1,args.length);
+            }
             PersistentDataContainer cont = w.getPersistentDataContainer();
             int[] coords = cont.get(plug.ARENA_COORDINATES,PersistentDataType.INTEGER_ARRAY);
             int startX = coords[0];
@@ -191,8 +197,11 @@ public class BuildLayer implements TabExecutor {
                     }
                 }
             }
-            //TODO: add dripstone genreration
-
+            for (int x = startX - 5; x < endX + 5; x++) {
+                for (int z = startZ - 5; z < endZ + 5; z++) {
+                    w.getBlockAt(x, -62, z).setType(Material.POINTED_DRIPSTONE);
+                }
+            }
             //prepare vars for layer gen
             int initY = -63 + spacing(w);
             int numLayers = cont.get(plug.LAYER_NUMBER,PersistentDataType.INTEGER);

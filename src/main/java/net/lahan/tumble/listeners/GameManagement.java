@@ -1,16 +1,17 @@
 package net.lahan.tumble.listeners;
 
 import net.lahan.tumble.Tumble;
-import net.lahan.tumble.events.TumbleGameStartEvent;
-import net.lahan.tumble.events.TumblePlayerElimEvent;
-import net.lahan.tumble.events.TumbleRoundStartEvent;
+import net.lahan.tumble.events.*;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -44,13 +45,12 @@ public class GameManagement implements Listener {
             p.setGameMode(GameMode.ADVENTURE);
         }
         playerLists.put(world,playersInGame);
-        plug.getServer().getPluginManager().callEvent(new TumbleRoundStartEvent(world));
+        plug.getServer().getPluginManager().callEvent(new TumbleRoundStartEvent(world,playersInGame));
     }
     @EventHandler
     public void roundSetup(TumbleRoundStartEvent e) {
         World world = e.getWorld();
-        Player commander = playerLists.get(world).get(0);
-        plug.getServer().dispatchCommand(commander,"tumble-buildLayer");
+        plug.getServer().dispatchCommand(plug.getServer().getConsoleSender(),"tumble-buildLayer "+world.getName());
         PersistentDataContainer worldData = world.getPersistentDataContainer();
         List<Player> playerList = playerLists.get(world);
         int height = -61+worldData.get(plug.LAYER_SPACING,PersistentDataType.INTEGER)*worldData.get(plug.LAYER_NUMBER,PersistentDataType.INTEGER);
@@ -72,10 +72,11 @@ public class GameManagement implements Listener {
             Location startPos = center.add(new Vector(spawnRad*Math.cos(2*Math.PI*i/playerList.size()),0,spawnRad*Math.sin(2*Math.PI*i/playerList.size())));
             p.setGameMode(GameMode.ADVENTURE);
             p.teleport(startPos);
-
         }
 
     }
+
+    @EventHandler
     public void playerElimTrack(TumblePlayerElimEvent e) {
         Player p = e.getPlayer();
         World w = p.getWorld();
@@ -85,7 +86,49 @@ public class GameManagement implements Listener {
         playerData.set(plug.ALIVE,PersistentDataType.BOOLEAN,false);
         worldData.set(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER,
                 worldData.get(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER)-1);
-
+        if(worldData.get(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER)==1) {
+            plug.getServer().getPluginManager().callEvent(new TumbleRoundStartEvent(w,playerLists.get(w)));
+        }
+    }
+    @EventHandler
+    public void playerLeaveConfig(PlayerQuitEvent event) {
+        World world = event.getPlayer().getWorld();
+        PersistentDataContainer playerData = event.getPlayer().getPersistentDataContainer();
+        PersistentDataContainer worldData = event.getPlayer().getWorld().getPersistentDataContainer();
+        boolean inGame = playerData.get(plug.IN_GAME,PersistentDataType.BOOLEAN);
+        boolean alive = playerData.get(plug.ALIVE,PersistentDataType.BOOLEAN);
+        if(inGame) worldData.set(plug.NUMBER_PLAYERS,PersistentDataType.INTEGER,
+                worldData.get(plug.NUMBER_PLAYERS,PersistentDataType.INTEGER)-1);
+        if(alive) worldData.set(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER,
+                worldData.get(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER)-1);
+        playerData.set(plug.IN_GAME, PersistentDataType.BOOLEAN,false);
+        playerData.set(plug.SCORE,PersistentDataType.INTEGER,0);
+        playerData.set(plug.ALIVE,PersistentDataType.BOOLEAN,false);
+        playerLists.get(world).remove(event.getPlayer());
+        if(worldData.get(plug.NUMBER_PLAYERS,PersistentDataType.INTEGER)==1)
+            plug.getServer().getPluginManager().callEvent(new TumbleGameEndEvent(world,playerLists.get(world)));
+        if(worldData.get(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER)==1)
+            plug.getServer().getPluginManager().callEvent(new TumbleRoundEndEvent(world,playerLists.get(world)));
     }
 
+    @EventHandler
+    public void playerWorldChangeConfig(PlayerChangedWorldEvent event) {
+        World world = event.getFrom();
+        PersistentDataContainer playerData = event.getPlayer().getPersistentDataContainer();
+        PersistentDataContainer worldData = event.getPlayer().getWorld().getPersistentDataContainer();
+        boolean inGame = playerData.get(plug.IN_GAME,PersistentDataType.BOOLEAN);
+        boolean alive = playerData.get(plug.ALIVE,PersistentDataType.BOOLEAN);
+        if(inGame) worldData.set(plug.NUMBER_PLAYERS,PersistentDataType.INTEGER,
+                worldData.get(plug.NUMBER_PLAYERS,PersistentDataType.INTEGER)-1);
+        if(alive) worldData.set(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER,
+                worldData.get(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER)-1);
+        playerData.set(plug.IN_GAME, PersistentDataType.BOOLEAN,false);
+        playerData.set(plug.SCORE,PersistentDataType.INTEGER,0);
+        playerData.set(plug.ALIVE,PersistentDataType.BOOLEAN,false);
+        playerLists.get(world).remove(event.getPlayer());
+        if(worldData.get(plug.NUMBER_PLAYERS,PersistentDataType.INTEGER)==1)
+            plug.getServer().getPluginManager().callEvent(new TumbleGameEndEvent(world,playerLists.get(world)));
+        if(worldData.get(plug.ACTIVE_PLAYERS,PersistentDataType.INTEGER)==1)
+            plug.getServer().getPluginManager().callEvent(new TumbleRoundEndEvent(world,playerLists.get(world)));
+    }
 }
