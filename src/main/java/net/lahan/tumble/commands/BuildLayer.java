@@ -99,7 +99,7 @@ public class BuildLayer implements TabExecutor {
             }
         }
         //generates a random layer feature
-        if(special&&Math.random()>0.1) {
+        if(special&&Math.random()>0.3) {
             switch (LAYER_MODIFICATIONS.get((int)(LAYER_MODIFICATIONS.size()*Math.random()))) {
                 case "donut":
                     //hole in the middle
