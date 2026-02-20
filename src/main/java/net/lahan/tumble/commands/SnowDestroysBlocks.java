@@ -14,6 +14,9 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /*Handles tumble-snowDestroysBlocks command
   boolean value assigned to each world
   each command sender can change their own world's value*/
@@ -36,23 +39,31 @@ public class SnowDestroysBlocks implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         //invalidate command if incorrect arguments are detected
-        if(args.length!=1 || !(args[0].equalsIgnoreCase("false")||args[0].equalsIgnoreCase("true")))
+        if(args.length<1 || args.length>2 || !(List.of("true","false")).contains(args[0].toLowerCase()))
             return false;
-        if(commandSender instanceof Entity e) {
-            //change value from entity sender
-            PersistentDataContainer container = e.getWorld().getPersistentDataContainer();
-            container.set(plug.SNOW_DESTROYS_BLOCKS, PersistentDataType.BOOLEAN,Boolean.parseBoolean(args[0]));
+        //prepare persistent data container
+        PersistentDataContainer container = null;
+        //check if world name was provided
+        if(args.length==2&&plug.getServer().getWorlds().stream().map(m->m.getName()).collect(Collectors.toList()).contains(args[1].toLowerCase())) {
+            //get world from name
+            container = plug.getServer().getWorld(args[1]).getPersistentDataContainer();
+        }
+        else if(commandSender instanceof Entity e) {
+            //get world from entity sender
+            container = e.getWorld().getPersistentDataContainer();
+
         }
         else if(commandSender instanceof BlockCommandSender b) {
-            //change value from block sender
-            PersistentDataContainer container = b.getBlock().getWorld().getPersistentDataContainer();
-            container.set(plug.SNOW_DESTROYS_BLOCKS, PersistentDataType.BOOLEAN,Boolean.parseBoolean(args[0]));
+            //get world from block sender
+            container = b.getBlock().getWorld().getPersistentDataContainer();
+
         }
         else {
-            //fail for console command sending (no world)
+            //fail case for undefined world
             return false;
         }
-        //success case (command went through and value was changed)
+        //success case (command went through and value can be changed)
+        container.set(plug.SNOW_DESTROYS_BLOCKS, PersistentDataType.BOOLEAN,Boolean.parseBoolean(args[0]));
         return true;
     }
 }
